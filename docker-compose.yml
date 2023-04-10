@@ -1,0 +1,36 @@
+# What is Docker Compose?
+#  -- it is a seperate CLI that gets installed along with docker
+#  -- it is used to start up multiple Docker containers at the same time
+#  -- it also helps automate some of the long winded arguments such as 'docker run' & 'docker build'
+#  -- This is done by encoding all these commands in a file - docker-compose-yml
+#  -- The file  contains all the containers you want to create along with its ports
+
+# STEPs to set up docker-compose.yml with 2 seperate services in 2 containers
+# Docker compose will automatically create these 2 containers on the same network
+
+# 1. Version of Docker
+version: '3'
+
+# 2. Tell docker what we want to do
+#  - build "redis-server" by taking from base image 'redis',
+#  - build "node-app" from current folder with mapping of ports 'local:container',
+#  - and always restart while something goes wrong or app clashes
+services:
+  redis-server:
+    image: 'redis'
+  node-app:
+    restart: on-failure
+    build: .
+    ports:
+      - '4001:8081'
+# Docker Compose Commands
+# -- docker-compose up -d
+# -- docker-compose up --build
+# -- docker-compose down
+# --
+
+# RESTART Policy
+#  -- "no" (only poilcy that needs to be in "") - Never attempt to restart this container even if it stops or crashes
+#  -- always - Restart container for any reason, i.e. suitable for web server container like apache
+#  -- on-failure - Only restart if container stops with an error code
+#  -- unless-stopped - Always restart under developer forceibly stop it in our code
